@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h1>Enter</h1>
+<form th:action="@{/login}" method="post">
+    <label>Login:
+        <input type="text" name="username">
+    </label>
+    <br>
+    <label>Password:
+        <input type="password" name="password">
+    </label>
+    <br>
+    <button type="submit">Log in</button>
+</form>
+
+<!-- Сообщения об ошибке -->
+<div th:if="${param.error}">
+    Invalid login or password
+</div>
+<div th:if="${param.logout}">
+    You are logged out
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+body { font-family: Arial, Helvetica, sans-serif; background: #f9fafb; color: #111; margin: 0; padding: 20px; }
+.wrap { max-width: 640px; margin: 0 auto; }
+.summary { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+.avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; background: #ddd; }
+.info .name { font-weight: 700; }
+.form label { display: block; margin-bottom: 10px; }
+input, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+.actions { margin-top: 12px; text-align: right; }
+button { padding: 8px 14px; border: none; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; }

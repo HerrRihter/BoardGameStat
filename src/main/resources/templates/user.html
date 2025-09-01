@@ -1,0 +1,27 @@
+<!-- File: profile.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="/templates/user.css">
+</head>
+<body>
+<main class="wrap">
+    <h1>My Profile</h1>
+
+    <section class="summary">
+        <div class="info">
+            <div class="name" th:text="${user.username}">Username</div>
+            <div class="email" th:text="${user.email}">email@example.com</div>
+        </div>
+    </section>
+
+    <section class="details">
+        <p><strong>Username:</strong> <span th:text="${user.username}">JohnDoe</span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></p>
+    </section>
+</main>
+</body>
+</html>
