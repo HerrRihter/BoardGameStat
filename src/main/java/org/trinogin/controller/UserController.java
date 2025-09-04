@@ -5,13 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.trinogin.User;
 import org.trinogin.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -41,4 +39,34 @@ public class UserController {
         model.addAttribute("user", user);
         return "user";
     }
+
+    @GetMapping("/home")
+    public String getUserHome(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userService.getUser(username);
+        model.addAttribute("user", user);
+        return "home";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@RequestParam("username") String username,
+                               @RequestParam("displayName") String displayname,
+                               @RequestParam("email") String email,
+                               @RequestParam("password") String password) {
+
+        User user = new User(username, email, displayname, null, password);
+
+        userService.saveUser(user);
+
+        return "redirect:/login";
+    }
+
+    @GetMapping("/register")
+    public String getRegisterPage() {
+        return "register";
+    }
+
+
 }
+
+// Форма регистрации, пароль в базу должен складывать в шифрованном виде

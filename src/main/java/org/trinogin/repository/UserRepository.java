@@ -4,12 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.trinogin.User;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 @Repository
@@ -25,11 +19,6 @@ public class UserRepository {
         String query = "SELECT * FROM usr WHERE username = '" + username + "'";
         Map<String, Object> userData = jdbc.queryForList(query).get(0);
 
-        try {
-            asd
-        } catch (IllegalAccessError e) {
-
-        }
 
         return new User(
                 userData.get("username").toString(),
@@ -40,8 +29,18 @@ public class UserRepository {
         );
     }
 
-    public tmp() {
+    public void saveUser(User user) {
+        jdbc.update("INSERT INTO usr (username, displayname, email, password) VALUES (?, ?, ?, ?)",
+                user.getUsername(),
+                user.getDisplayName(),
+                user.getEmail(),
+                user.getPassword());
 
+        System.out.println(String.format("Kek user inserted: %s, %s, %s, %s",
+                user.getUsername(),
+                user.getDisplayName(),
+                user.getEmail(),
+                user.getPassword()));
     }
 }
 

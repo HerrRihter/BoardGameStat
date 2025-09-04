@@ -15,4 +15,9 @@ public class UserService {
     public User getUser(String username) {
         return userRepository.getUserByUserName(username);
     }
+
+    public void saveUser (User user){
+        userRepository.saveUser(user);
+        // TODO validator + SQL operation status check
+    }
 }

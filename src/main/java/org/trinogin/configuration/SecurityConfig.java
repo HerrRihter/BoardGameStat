@@ -2,6 +2,7 @@ package org.trinogin.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,9 +16,12 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/login", "/css/**").permitAll().anyRequest().authenticated())
+                        auth.requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
+                                .requestMatchers("/login", "/css/**", "/api/user/register").permitAll().anyRequest().authenticated()
+                )
+
                 .formLogin(form -> form.loginPage("/login")
-                        .defaultSuccessUrl("/api/user/Andrew", true)
+                        .defaultSuccessUrl("/api/user/home", true)
                         .permitAll())
                 .logout(logout -> logout.logoutSuccessUrl("/login?logout").permitAll());
         return http.build();
