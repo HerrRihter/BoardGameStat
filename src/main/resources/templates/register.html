@@ -7,18 +7,18 @@
 <body>
 <h1>Register</h1>
 
-<form method="post" th:action="@{/api/user/register}">
+<form method="post" th:action="@{/register}">
     <!-- CSRF (Spring Security). Удалите строку ниже, если не используете Spring Security -->
 <!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 
     <div>
         <label for="username">Username</label><br />
-        <input id="username" name="username" type="text" required autocomplete="username" />
+        <input id="username" name="userName" type="text" required autocomplete="username" />
     </div>
 
     <div>
-        <label for="displayName">Display Name</label><br />
-        <input id="displayName" name="displayName" type="text" required autocomplete="name" />
+        <label for="displayname">Display Name</label><br />
+        <input id="displayname" name="displayName" type="text" required autocomplete="name" />
     </div>
 
     <div>

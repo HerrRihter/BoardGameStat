@@ -26,11 +26,6 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @GetMapping("/all")
-//    public List<Map<String, Object>> getUsers() {
-//        String query = "SELECT * FROM usr";
-//        return jdbcTemplate.queryForList(query);
-//    }
 
     @GetMapping("/{username}")
     public String getUser(@PathVariable String username, Model model) {
@@ -47,26 +42,4 @@ public class UserController {
         model.addAttribute("user", user);
         return "home";
     }
-
-    @PostMapping("/register")
-    public String registerUser(@RequestParam("username") String username,
-                               @RequestParam("displayName") String displayname,
-                               @RequestParam("email") String email,
-                               @RequestParam("password") String password) {
-
-        User user = new User(username, email, displayname, null, password);
-
-        userService.saveUser(user);
-
-        return "redirect:/login";
-    }
-
-    @GetMapping("/register")
-    public String getRegisterPage() {
-        return "register";
-    }
-
-
 }
-
-// Форма регистрации, пароль в базу должен складывать в шифрованном виде
