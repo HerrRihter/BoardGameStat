@@ -19,11 +19,25 @@ public class UserService {
         return userRepository.getUserByUserName(username);
     }
 
-    public void saveUser(User user) {
+    public void createUser(User user) {
         String passwordHash = passwordEncoder.encode(user.getPassword());
-        User ecriptedUser = new User(user.getUsername(), user.getEmail(), user.getDisplayName(), user.getUserId(), passwordHash);
-        userRepository.saveUser(ecriptedUser);
+        User encryptedUser = new User(
+                user.getUsername(),
+                user.getEmail(),
+                user.getDisplayName(),
+                user.getUserId(),
+                passwordHash,
+                user.getAuthorities()
+        );
+        userRepository.createUser(encryptedUser);
+    }
 
-        // TODO validator + SQL operation status check
+    public void saveUser(User user) {
+        userRepository.updateUser(user);
+    }
+
+    public void changePassword(String username, String newPassword) {
+        String hash = passwordEncoder.encode(newPassword);
+        userRepository.updateUserPassword(username, hash);
     }
 }

@@ -6,13 +6,15 @@ public class User {
     private final String displayName;
     private final String userId;
     private final String password;
+    private final String role;
 
-    public User(String userName, String email, String displayName, String userId, String password) {
+    public User(String userName, String email, String displayName, String userId, String password, String role) {
         this.userName = userName;
         this.email = email;
         this.displayName = displayName;
         this.userId = userId;
         this.password = password;
+        this.role = role;
     }
 
     public String getUsername() {
@@ -33,5 +35,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getAuthorities() {
+        return role;
     }
 }

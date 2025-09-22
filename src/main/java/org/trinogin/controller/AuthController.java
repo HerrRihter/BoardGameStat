@@ -23,8 +23,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user) {
-        //
-        userService.saveUser(user);
+        userService.createUser(user);
 
         return "redirect:/login";
     }
@@ -32,5 +31,10 @@ public class AuthController {
     @GetMapping("/register")
     public String getRegisterPage() {
         return "register";
+    }
+
+    @PostMapping("/logout")
+    public String logout() {
+        return "redirect:/login?logout";
     }
 }

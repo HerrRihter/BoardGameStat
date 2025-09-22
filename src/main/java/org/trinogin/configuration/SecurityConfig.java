@@ -8,13 +8,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Value("${security.rememberme.key:boardgamestat-remember-me-key}")
+    private String rememberMeKey;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth ->
@@ -23,9 +28,15 @@ public class SecurityConfig {
                 )
 
                 .formLogin(form -> form.loginPage("/login")
-                        .defaultSuccessUrl("/api/user/home", true)
+                        .defaultSuccessUrl("/board-game-stat/home", true)
                         .permitAll())
-                .logout(logout -> logout.logoutSuccessUrl("/login?logout").permitAll());
+                .logout(logout -> logout.logoutSuccessUrl("/login?logout").permitAll())
+                .rememberMe(rm -> rm
+                        .key(rememberMeKey)
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(60 * 60 * 24 * 14) // 14 days
+                        .userDetailsService(userDetailsService)
+                );
         return http.build();
     }
 

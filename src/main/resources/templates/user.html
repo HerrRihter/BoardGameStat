@@ -1,27 +1,84 @@
-<!-- File: profile.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>My Profile</title>
-    <link rel="stylesheet" href="/templates/user.css">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/css/user.css">
+    <script>
+        function toggleEdit(on) {
+            document.getElementById('view').style.display = on ? 'none' : '';
+            document.getElementById('edit').style.display = on ? '' : 'none';
+        }
+        function togglePwd(on) {
+            document.getElementById('view').style.display = on ? 'none' : '';
+            document.getElementById('pwd').style.display = on ? '' : 'none';
+        }
+    </script>
 </head>
 <body>
-<main class="wrap">
-    <h1>My Profile</h1>
-
-    <section class="summary">
-        <div class="info">
-            <div class="name" th:text="${user.username}">Username</div>
-            <div class="email" th:text="${user.email}">email@example.com</div>
+    <header class="navbar">
+        <div class="brand"><span class="dot"></span>BoardGameStat</div>
+        <div class="nav-actions">
+            <a href="/board-game-stat/home" class="btn-ghost">Home</a>
+            <a href="/logout" class="btn-ghost">Log Out</a>
         </div>
-    </section>
+    </header>
 
-    <section class="details">
-        <p><strong>Username:</strong> <span th:text="${user.username}">JohnDoe</span></p>
-        <p><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></p>
-    </section>
-</main>
+    <div class="container">
+        <div class="grid">
+            <aside class="sidebar">
+                <div class="section-title">Profile</div>
+                <a href="#" onclick="toggleEdit(true);return false;">Edit profile</a>
+                <a href="#" onclick="togglePwd(true);return false;">Change password</a>
+            </aside>
+            <section class="content">
+                <div class="card" id="view">
+                    <div class="stack center" style="gap:14px;">
+                        <div class="avatar" th:text="${#strings.substring(user.displayName != null && !#strings.isEmpty(user.displayName) ? user.displayName : user.username, 0, 1).toUpperCase()}">U</div>
+                        <div class="title" th:text="${user.displayName != null && !#strings.isEmpty(user.displayName) ? user.displayName : user.username}">Display Name</div>
+                        <div class="subtitle muted" th:text="${'@' + user.username}">@username</div>
+                        <div class="subtitle" th:text="${user.email}">email@example.com</div>
+                        <div class="actions">
+                            <button class="btn-primary" type="button" onclick="toggleEdit(true)">Edit</button>
+                            <button class="btn-ghost" type="button" onclick="togglePwd(true)">Change password</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" id="edit" style="display:none;">
+                    <div class="title">Edit profile</div>
+                    <form th:action="@{/board-game-stat/update}" method="post">
+                        <div class="row">
+                            <label for="displayName">Display name</label>
+                            <input id="displayName" name="displayName" th:value="${user.displayName}" />
+                        </div>
+                        <div class="row">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" th:value="${user.email}" />
+                        </div>
+                        <div class="actions">
+                            <button type="submit" class="btn-primary">Save</button>
+                            <button type="button" class="btn-ghost" onclick="toggleEdit(false)">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" id="pwd" style="display:none;">
+                    <div class="title">Change password</div>
+                    <form th:action="@{/board-game-stat/update-password}" method="post">
+                        <div class="row">
+                            <label for="newPassword">New password</label>
+                            <input id="newPassword" name="newPassword" type="password" required />
+                        </div>
+                        <div class="actions">
+                            <button type="submit" class="btn-primary">Update password</button>
+                            <button type="button" class="btn-ghost" onclick="togglePwd(false)">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
 </body>
 </html>

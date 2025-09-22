@@ -1,29 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Login</title>
+    <link rel="stylesheet" href="/css/user.css">
 </head>
 <body>
-<h1>Enter</h1>
-<form th:action="@{/login}" method="post">
-    <label>Login:
-        <input type="text" name="username">
-    </label>
-    <br>
-    <label>Password:
-        <input type="password" name="password">
-    </label>
-    <br>
-    <button type="submit">Log in</button>
-</form>
+    <header class="navbar">
+        <div class="brand"><span class="dot"></span>BoardGameStat</div>
+        <div class="nav-actions">
+            <a href="/register" class="btn-ghost">Create account</a>
+        </div>
+    </header>
 
-<!-- Сообщения об ошибке -->
-<div th:if="${param.error}">
-    Invalid login or password
-</div>
-<div th:if="${param.logout}">
-    You are logged out
-</div>
+    <div class="container auth-wrap">
+        <div class="card">
+            <div class="auth-title">
+                <div class="title">Log in</div>
+                <div class="subtitle muted">Access your account</div>
+            </div>
+            <form th:action="@{/login}" method="post">
+                <div class="row">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" name="username" autocomplete="username" required>
+                </div>
+                <div class="row">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" autocomplete="current-password" required>
+                </div>
+                <div class="row" style="flex-direction: row; align-items: center; gap: 8px;">
+                    <input id="remember-me" type="checkbox" name="remember-me">
+                    <label for="remember-me" style="margin: 0;">Remember me</label>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn-primary">Log in</button>
+                    <a href="/register" class="btn-ghost">Sign up</a>
+                </div>
+            </form>
+
+            <div th:if="${param.error}" class="error">Invalid login or password</div>
+            <div th:if="${param.logout}" class="success">You are logged out</div>
+        </div>
+    </div>
 </body>
 </html>

@@ -2,7 +2,6 @@ package org.trinogin.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +9,10 @@ import org.trinogin.User;
 import org.trinogin.service.UserService;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Map;
 
 
 @Controller
-@RequestMapping("/api/user")
+@RequestMapping("/board-game-stat")
 public class UserController {
 
     private final UserService userService;
@@ -27,9 +24,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/{username}")
-    public String getUser(@PathVariable String username, Model model) {
-        logger.debug("Received getUser request with username:" + username);
+    @GetMapping("/me")
+    public String getUser(Model model, Principal principal) {
+        String username = principal.getName();
         User user = userService.getUser(username);
         model.addAttribute("user", user);
         return "user";
@@ -41,5 +38,26 @@ public class UserController {
         User user = userService.getUser(username);
         model.addAttribute("user", user);
         return "home";
+    }
+
+    @PostMapping("/update-password")
+    public String updatePassword(@RequestParam("newPassword") String newPassword, Principal principal) {
+        String username = principal.getName();
+        userService.changePassword(username, newPassword);
+        return "redirect:/board-game-stat/me";
+    }
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute User user, Principal principal) {
+        String username = principal.getName();
+        User updated = new User(
+                username,
+                user.getEmail(),
+                user.getDisplayName(),
+                user.getUserId(),
+                user.getPassword(),
+                user.getAuthorities()
+        );
+        userService.saveUser(updated);
+        return "redirect:/board-game-stat/me";
     }
 }

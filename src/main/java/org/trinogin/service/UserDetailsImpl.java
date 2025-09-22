@@ -10,17 +10,19 @@ import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private String username;
-    private String password;
+    private final String role;
+    private final String username;
+    private final String password;
 
     public UserDetailsImpl(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.role = user.getAuthorities();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
