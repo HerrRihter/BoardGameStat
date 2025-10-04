@@ -21,9 +21,11 @@ public class UserEntity {
     private Long userId;
 
     @Getter
+    @Setter
     @ToString.Exclude
-    private final String password;
+    private String password;
 
+    @Getter
     private final String role;
 
     public UserEntity(String userName, String email, String displayName, Long userId, String password, String role) {
@@ -33,6 +35,15 @@ public class UserEntity {
         this.userId = userId;
         this.password = password;
         this.role = role;
+    }
+
+    public UserEntity (User user) {
+        this.userName = user.getUsername();
+        this.email = user.getEmail();
+        this.displayName = user.getDisplayName();
+        this.userId = Long.valueOf(user.getUserId());
+        this.password = user.getPassword();
+        this.role = user.getAuthorities();
     }
 
     public String getAuthorities() {

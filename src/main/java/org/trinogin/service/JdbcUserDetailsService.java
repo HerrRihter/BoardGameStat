@@ -16,7 +16,7 @@ public class JdbcUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsername(String username) {
-        var user = userRepository.getUserByUserName(username);
+        var user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found: " + username);
         }

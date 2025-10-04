@@ -1,13 +1,10 @@
 package org.trinogin.repository;
 
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.trinogin.User;
 import org.trinogin.UserEntity;
 
 import java.sql.ResultSet;
