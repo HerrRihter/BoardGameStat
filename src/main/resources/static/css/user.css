@@ -91,6 +91,15 @@ body {
 .sidebar .section-title { font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
 .sidebar a { display:block; color: var(--text); text-decoration: none; padding: 8px 10px; border-radius: 8px; }
 .sidebar a:hover { background: #12161b; color: var(--text); }
+.sidebar a.active { background: #12161b; border: 1px solid var(--border); }
+
+/* Page toolbar */
+.page-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.page-title { font-size: 28px; font-weight: 700; }
+
+/* Modal */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 100; }
+.modal { width: 420px; max-width: calc(100vw - 32px); background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow); }
 
 .content {
     display: flex;

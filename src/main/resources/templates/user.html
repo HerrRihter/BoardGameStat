@@ -17,21 +17,11 @@
     </script>
 </head>
 <body>
-    <header class="navbar">
-        <div class="brand"><span class="dot"></span>BoardGameStat</div>
-        <div class="nav-actions">
-            <a href="/board-game-stat/home" class="btn-ghost">Home</a>
-            <a href="/logout" class="btn-ghost">Log Out</a>
-        </div>
-    </header>
+    <div th:replace="fragments/header :: appHeader('Profile')"></div>
 
     <div class="container">
         <div class="grid">
-            <aside class="sidebar">
-                <div class="section-title">Profile</div>
-                <a href="#" onclick="toggleEdit(true);return false;">Edit profile</a>
-                <a href="#" onclick="togglePwd(true);return false;">Change password</a>
-            </aside>
+            <div th:replace="fragments/sidebar :: appSidebar('profile')"></div>
             <section class="content">
                 <div class="card" id="view">
                     <div class="stack center" style="gap:14px;">

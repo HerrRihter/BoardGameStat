@@ -4,14 +4,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.trinogin.repository.UserRepository;
+import org.trinogin.repository.JdbcUserRepository;
 
 @Service
 public class JdbcUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final JdbcUserRepository userRepository;
 
-    public JdbcUserDetailsService(UserRepository userRepository) {
+    public JdbcUserDetailsService(JdbcUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

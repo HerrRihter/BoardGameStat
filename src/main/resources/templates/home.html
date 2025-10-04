@@ -7,34 +7,18 @@
     <link rel="stylesheet" href="/css/user.css">
 </head>
 <body class="home">
-    <header class="navbar">
-        <div class="brand"><span class="dot"></span>BoardGameStat</div>
-        <div class="nav-actions">
-            <a href="/board-game-stat/me" class="muted" th:text="${'@' + user.username}">@username</a>
-            <a href="/logout" class="btn-ghost">Log Out</a>
-        </div>
-    </header>
+    <div th:replace="fragments/header :: appHeader('Home')"></div>
 
     <div class="container">
         <div class="grid">
-            <aside class="sidebar">
-                <div class="section-title">Navigate</div>
-                <a href="/board-game-stat/home">Home</a>
-                <a href="#games">Games</a>
-                <a href="#groups">Groups</a>
-                <a href="#stats">Stats</a>
-                <a href="/board-game-stat/me">Profile</a>
-            </aside>
+            <div th:replace="fragments/sidebar :: appSidebar('home')"></div>
             <section class="content">
                 <div class="card">
                     <div class="title">Welcome back, <span th:text="${user.displayName}">Username</span>!</div>
                     <div class="subtitle" th:text="${'@' + user.username}">@username</div>
                 </div>
 
-                <div id="games" class="card">
-                    <div class="title">Games</div>
-                    <p>List of available games will appear here.</p>
-                </div>
+                
 
                 <div id="groups" class="card">
                     <div class="title">Groups</div>

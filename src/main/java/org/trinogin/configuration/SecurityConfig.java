@@ -23,8 +23,11 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(HttpMethod.POST, "/register").permitAll()
-                                .requestMatchers("/login", "/css/**", "/register").permitAll().anyRequest().authenticated()
+                        auth
+                                .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                                .requestMatchers("/login", "/css/**", "/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/board-game-stat/games/add").hasAuthority("admin")
+                                .anyRequest().authenticated()
                 )
 
                 .formLogin(form -> form.loginPage("/login")

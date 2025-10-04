@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Games</title>
+    <link rel="stylesheet" href="/css/user.css">
+    <style>
+        .games-list { display: grid; gap: 8px; }
+        .game-item { padding: 8px 12px; border: 1px solid #e4e4e7; border-radius: 8px; }
+        form.inline { display: flex; gap: 8px; align-items: center; }
+        .muted-btn { opacity: 0.5; cursor: not-allowed; }
+        .muted-input { opacity: 0.7; }
+    </style>
+    <script>
+        function confirmSubmit(e){
+            const input = document.getElementById('game-name');
+            if(!input.value.trim()){
+                e.preventDefault();
+                input.focus();
+            }
+        }
+    </script>
+    <meta th:if="${_csrf != null}" name="csrf-token" th:content="${_csrf.token}"/>
+    <meta th:if="${_csrf != null}" name="csrf-header" th:content="${_csrf.headerName}"/>
+    <meta th:if="${_csrf != null}" name="csrf-param" th:content="${_csrf.parameterName}"/>
+    <script th:if="${_csrf != null}">
+        document.addEventListener('DOMContentLoaded', function(){
+            const t = document.querySelector('meta[name="csrf-token"]').content;
+            const p = document.querySelector('meta[name="csrf-param"]').content;
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = p; input.value = t;
+            const f = document.getElementById('add-game-form');
+            if(f) f.appendChild(input);
+        });
+    </script>
+    <!-- No inline comments inside code beyond this point -->
+    
+</head>
+<body>
+<div th:replace="fragments/header :: appHeader('Games')"></div>
+
+<div class="container">
+    <div class="grid">
+        <div th:replace="fragments/sidebar :: appSidebar('games')"></div>
+        <section class="content">
+            <div class="page-toolbar">
+                <div class="page-title">Games</div>
+                <div>
+                    <button id="open-add" class="btn-primary" th:disabled="${!isAdmin}" th:classappend="${!isAdmin} ? ' muted-btn' : ''">Add game</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="games-list" th:if="${games != null and !#lists.isEmpty(games)}">
+                    <div th:each="g : ${games}" class="game-item" th:text="${g.name}">Game Name</div>
+                </div>
+                <div th:if="${games == null or #lists.isEmpty(games)}" class="center" style="padding: 28px 0;">
+                    <div class="stack" style="align-items:center;">
+                        <div class="subtitle muted">No games yet</div>
+                        <button class="btn-primary" th:if="${isAdmin}" id="open-add-empty">Add your first game</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+        <div class="title" id="modal-title">Add a game</div>
+        <form id="add-game-form" method="post" th:action="@{/board-game-stat/games/add}" onsubmit="confirmSubmit(event)">
+            <div class="row">
+                <label for="game-name">Name</label>
+                <input id="game-name" name="name" type="text" placeholder="Game name" required th:disabled="${!isAdmin}"/>
+            </div>
+            <div class="actions">
+                <button type="button" class="btn-ghost" id="close-add">Cancel</button>
+                <button type="submit" class="btn-primary" th:disabled="${!isAdmin}">Add</button>
+            </div>
+        </form>
+    </div>
+    
+</div>
+
+<script>
+    const modal = document.getElementById('modal');
+    const open1 = document.getElementById('open-add');
+    const open2 = document.getElementById('open-add-empty');
+    const closeBtn = document.getElementById('close-add');
+    function openModal(){ if(open1 && !open1.disabled) { modal.style.display = 'flex'; setTimeout(() => document.getElementById('game-name')?.focus(), 0); } }
+    function closeModal(){ modal.style.display = 'none'; }
+    if(open1) open1.addEventListener('click', openModal);
+    if(open2) open2.addEventListener('click', openModal);
+    if(closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal?.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+</script>
+
+</body>
+</html>
+
+

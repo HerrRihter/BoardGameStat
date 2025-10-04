@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="appSidebar(active)">
+        <aside class="sidebar">
+            <div class="section-title">Navigate</div>
+            <a th:classappend="${active} == 'home' ? ' active' : ''" href="/board-game-stat/home">Home</a>
+            <a th:classappend="${active} == 'games' ? ' active' : ''" href="/board-game-stat/games">Games</a>
+            <a th:classappend="${active} == 'groups' ? ' active' : ''" href="#groups">Groups</a>
+            <a th:classappend="${active} == 'stats' ? ' active' : ''" href="#stats">Stats</a>
+            <a th:classappend="${active} == 'profile' ? ' active' : ''" href="/board-game-stat/me">Profile</a>
+        </aside>
+    </div>
+    
+</body>
+</html>
+
+
+

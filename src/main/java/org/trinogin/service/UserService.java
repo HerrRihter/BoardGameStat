@@ -3,20 +3,23 @@ package org.trinogin.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.trinogin.User;
+import org.trinogin.UserEntity;
+import org.trinogin.repository.JdbcUserRepository;
 import org.trinogin.repository.UserRepository;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    private final JdbcUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(JdbcUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public User getUser(String username) {
-        return userRepository.getUserByUserName(username);
+        userRepository.findByUsername(username);
+        return new User()
     }
 
     public void createUser(User user) {
