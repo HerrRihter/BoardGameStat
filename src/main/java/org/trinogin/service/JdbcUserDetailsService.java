@@ -17,9 +17,9 @@ public class JdbcUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) {
         var user = userRepository.findByUsername(username);
-        if (user == null) {
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found: " + username);
         }
-        return new UserDetailsImpl(user);
+        return new UserDetailsImpl(user.get());
     }
 }

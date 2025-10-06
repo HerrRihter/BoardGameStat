@@ -3,7 +3,7 @@ package org.trinogin.service;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.trinogin.User;
+import org.trinogin.UserEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,10 +14,10 @@ public class UserDetailsImpl implements UserDetails {
     private final String username;
     private final String password;
 
-    public UserDetailsImpl(User user) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.role = user.getAuthorities();
+    public UserDetailsImpl(UserEntity userEntity) {
+        this.username = userEntity.getUserName();
+        this.password = userEntity.getPassword();
+        this.role = userEntity.getAuthorities();
     }
 
     @Override

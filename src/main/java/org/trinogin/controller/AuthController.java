@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.trinogin.User;
+import org.trinogin.dto.UserCreateRequest;
 import org.trinogin.service.UserService;
 
 @Controller
@@ -22,8 +23,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user) {
-        userService.createUser(user);
+    public String registerUser(@ModelAttribute UserCreateRequest userCreateRequest) {
+        userService.createUser(userCreateRequest);
 
         return "redirect:/login";
     }

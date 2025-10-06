@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.trinogin.User;
+import org.trinogin.dto.UserUpdateRequest;
 import org.trinogin.service.UserService;
 
 import java.security.Principal;
@@ -40,24 +41,19 @@ public class UserController {
         return "home";
     }
 
+
     @PostMapping("/update-password")
     public String updatePassword(@RequestParam("newPassword") String newPassword, Principal principal) {
         String username = principal.getName();
         userService.changePassword(username, newPassword);
         return "redirect:/board-game-stat/me";
     }
+
     @PostMapping("/update")
-    public String updateUser(@ModelAttribute User user, Principal principal) {
-        String username = principal.getName();
-        User updated = new User(
-                username,
-                user.getEmail(),
-                user.getDisplayName(),
-                user.getUserId(),
-                user.getPassword(),
-                user.getAuthorities()
-        );
-        userService.saveUser(updated);
+    public String updateUser(@ModelAttribute UserUpdateRequest userUpdateRequest, Principal principal) {
+        userUpdateRequest.setUserName(principal.getName());
+
+        userService.updateUser(userUpdateRequest);
         return "redirect:/board-game-stat/me";
     }
 }

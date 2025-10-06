@@ -6,6 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.trinogin.User;
 import org.trinogin.UserEntity;
+import org.trinogin.dto.UserCreateRequest;
+import org.trinogin.dto.UserUpdateRequest;
+import org.trinogin.mapper.UserMapper;
 import org.trinogin.repository.JdbcUserRepository;
 import org.trinogin.repository.UserRepository;
 
@@ -38,14 +41,13 @@ public class UserService {
         }
     }
 
-    public void createUser(User user) {
-
-        boolean usernameExists = userRepository.existsByUsername(user.getUsername());
-        boolean emailExists = userRepository.existsByUsername(user.getEmail());
+    public void createUser(UserCreateRequest userCreateRequest) {
+        boolean usernameExists = userRepository.existsByUsername(userCreateRequest.getUserName());
+        boolean emailExists = userRepository.existsByUsername(userCreateRequest.getEmail());
 
         if (!usernameExists && !emailExists) {
-            String passwordHash = passwordEncoder.encode(user.getPassword());
-            UserEntity encryptedUser = new UserEntity(user);
+            String passwordHash = passwordEncoder.encode(userCreateRequest.getPassword());
+            UserEntity encryptedUser = UserMapper.fromUserCreateRequest(userCreateRequest);
             encryptedUser.setPassword(passwordHash);
             userRepository.save(encryptedUser);
         } else {
@@ -54,8 +56,8 @@ public class UserService {
         }
     }
 
-    public void updateUser(User user) {
-        UserEntity userEntity = new UserEntity(user);
+    public void updateUser(UserUpdateRequest userUpdateRequest) {
+        UserEntity userEntity = UserMapper.fromUserUpdateRequest(userUpdateRequest);
         userRepository.update(userEntity);
     }
 
