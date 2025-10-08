@@ -2,6 +2,7 @@ package org.trinogin.mapper;
 
 import org.trinogin.UserEntity;
 import org.trinogin.dto.UserCreateRequest;
+import org.trinogin.dto.UserDTO;
 import org.trinogin.dto.UserUpdateRequest;
 
 public class UserMapper {
@@ -24,6 +25,17 @@ public class UserMapper {
                 null,
                 userCreateRequest.getPassword(),
                 null);
+    }
+
+    public static UserDTO toUserDTO(UserEntity userEntity) {
+        if (userEntity == null) {
+            return null;
+        }
+        return new UserDTO(
+                userEntity.getUserName(),
+                userEntity.getEmail(),
+                userEntity.getDisplayName()
+        );
     }
 
 }

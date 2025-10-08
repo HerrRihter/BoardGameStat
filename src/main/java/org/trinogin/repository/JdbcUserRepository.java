@@ -57,24 +57,19 @@ public class JdbcUserRepository implements UserRepository {
                 VALUES (?, ?, ?, ?, (SELECT role_id FROM roles WHERE role_name = ?))
                 RETURNING user_id""";
 
-        try {
-            Long newUserId = jdbc.queryForObject(
-                    query,
-                    Long.class,
-                    user.getUserName(),
-                    user.getDisplayName(),
-                    user.getEmail(),
-                    user.getPassword(),
-                    user.getAuthorities() == null ? "user" : user.getAuthorities()
-            );
+        Long newUserId = jdbc.queryForObject(
+                query,
+                Long.class,
+                user.getUserName(),
+                user.getDisplayName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getAuthorities() == null ? "user" : user.getAuthorities()
+        );
 
-            logger.debug("User inserted:{}", newUserId);
-            user.setUserId(newUserId);
-            return user;
-        } catch (Exception e) {
-            logger.debug("Failed to insert user: {}; Error: {}", user.getUserName(), e.toString());
-            throw new RuntimeException("Failed to insert user", e);
-        }
+        logger.debug("User inserted:{}", newUserId);
+        user.setUserId(newUserId);
+        return user;
     }
 
     @Override
@@ -83,19 +78,14 @@ public class JdbcUserRepository implements UserRepository {
         logger.debug("Updating user: {}", user);
         String query = "UPDATE users SET displayname = ?, email = ? WHERE username = ?";
 
-        try {
-            jdbc.update(query,
-                    user.getDisplayName(),
-                    user.getEmail(),
-                    user.getUserName());
+        jdbc.update(query,
+                user.getDisplayName(),
+                user.getEmail(),
+                user.getUserName());
 
-            logger.debug("User updated:{}", user);
+        logger.debug("User updated:{}", user);
 
-            return user;
-        } catch (Exception e) {
-            logger.debug("Failed to update user: {}; Error: {}", user.getUserName(), e.toString());
-            throw new RuntimeException("Failed to update user", e);
-        }
+        return user;
     }
 
     @Override
@@ -104,13 +94,8 @@ public class JdbcUserRepository implements UserRepository {
         logger.debug("Updating password for user:{}", username);
         String query = "UPDATE users SET password_hash = ? WHERE username = ?";
 
-        try {
-            jdbc.update(query, passwordHash, username);
-            logger.debug("Password updated for user:{}", username);
-        } catch (Exception e) {
-            logger.debug("Failed to update password for user: {}; Error: {}", username, e.toString());
-            throw new RuntimeException("Failed to update password for user", e);
-        }
+        jdbc.update(query, passwordHash, username);
+        logger.debug("Password updated for user:{}", username);
     }
 
 
@@ -120,12 +105,8 @@ public class JdbcUserRepository implements UserRepository {
         logger.debug("Checking if user exists by username={}", username);
         String query = "SELECT EXISTS (SELECT 1 FROM users WHERE username = ?)";
 
-        try {
-            return jdbc.queryForObject(query, Boolean.class, username);
-        } catch (Exception e) {
-            logger.debug("Failed checking existing by username user: {}; Error: {}", username, e.toString());
-            throw new RuntimeException("Failed checking existing by username user", e);
-        }
+        Boolean exists = jdbc.queryForObject(query, Boolean.class, username);
+        return exists != null && exists;
     }
 
     @Override
@@ -134,12 +115,8 @@ public class JdbcUserRepository implements UserRepository {
         logger.debug("Checking if user exists by email={}", email);
         String query = "SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
 
-        try {
-            return jdbc.queryForObject(query, Boolean.class, email);
-        } catch (Exception e) {
-            logger.debug("Failed checking existing by email user: {}; Error: {}", email, e.toString());
-            throw new RuntimeException("Failed checking existing by email user", e);
-        }
+        Boolean exists = jdbc.queryForObject(query, Boolean.class, email);
+        return exists != null && exists;
     }
 
     private static class UserRowMapper implements RowMapper<UserEntity> {

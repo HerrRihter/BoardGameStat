@@ -2,12 +2,26 @@ package org.trinogin.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Getter
 @Setter
 public class UserCreateRequest {
-    private  String userName;
-    private  String email;
-    private  String displayName;
-    private  String password;
+    @NotBlank
+    @Size(min = 3, max = 32)
+    private String userName;
+
+    @NotBlank
+    @Email
+    @Size(max = 255)
+    private String email;
+
+    @Size(max = 100)
+    private String displayName;
+
+    @NotBlank
+    @Size(min = 3, max = 100)
+    private String password;
 }

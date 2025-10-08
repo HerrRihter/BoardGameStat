@@ -7,7 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.trinogin.User;
 import org.trinogin.dto.UserUpdateRequest;
+import org.trinogin.dto.UserDTO;
+import org.trinogin.mapper.UserMapper;
 import org.trinogin.service.UserService;
+import jakarta.validation.Valid;
 
 import java.security.Principal;
 
@@ -28,16 +31,16 @@ public class UserController {
     @GetMapping("/me")
     public String getUser(Model model, Principal principal) {
         String username = principal.getName();
-        User user = userService.getUser(username);
-        model.addAttribute("user", user);
+        UserDTO dto = userService.getUser(username);
+        model.addAttribute("user", dto);
         return "user";
     }
 
     @GetMapping("/home")
     public String getUserHome(Model model, Principal principal) {
         String username = principal.getName();
-        User user = userService.getUser(username);
-        model.addAttribute("user", user);
+        UserDTO dto = userService.getUser(username);
+        model.addAttribute("user", dto);
         return "home";
     }
 
@@ -50,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String updateUser(@ModelAttribute UserUpdateRequest userUpdateRequest, Principal principal) {
+    public String updateUser(@Valid @ModelAttribute UserUpdateRequest userUpdateRequest, Principal principal) {
         userUpdateRequest.setUserName(principal.getName());
 
         userService.updateUser(userUpdateRequest);
