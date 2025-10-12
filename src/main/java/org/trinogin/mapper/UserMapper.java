@@ -9,7 +9,7 @@ public class UserMapper {
 
     public static UserEntity fromUserUpdateRequest(UserUpdateRequest userUpdateRequest) {
         return new UserEntity(
-                userUpdateRequest.getUserName(),
+                userUpdateRequest.getUsername(),
                 userUpdateRequest.getEmail(),
                 userUpdateRequest.getDisplayName(),
                 null,
@@ -19,7 +19,7 @@ public class UserMapper {
 
     public static UserEntity fromUserCreateRequest(UserCreateRequest userCreateRequest) {
         return new UserEntity(
-                userCreateRequest.getUserName(),
+                userCreateRequest.getUsername(),
                 userCreateRequest.getEmail(),
                 userCreateRequest.getDisplayName(),
                 null,
@@ -32,7 +32,7 @@ public class UserMapper {
             return null;
         }
         return new UserDTO(
-                userEntity.getUserName(),
+                userEntity.getUsername(),
                 userEntity.getEmail(),
                 userEntity.getDisplayName()
         );

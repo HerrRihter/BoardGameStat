@@ -49,6 +49,13 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<Long> findIdByUsername(String username) {
+        String query = "SELECT user_id FROM users WHERE username = ?";
+        Long id = jdbc.queryForObject(query, Long.class, username);
+        return Optional.of(id);
+    }
+
+    @Override
     public UserEntity save(UserEntity user) {
 
         logger.debug("Creating new user:{}", user);
@@ -60,7 +67,7 @@ public class JdbcUserRepository implements UserRepository {
         Long newUserId = jdbc.queryForObject(
                 query,
                 Long.class,
-                user.getUserName(),
+                user.getUsername(),
                 user.getDisplayName(),
                 user.getEmail(),
                 user.getPassword(),
@@ -81,7 +88,7 @@ public class JdbcUserRepository implements UserRepository {
         jdbc.update(query,
                 user.getDisplayName(),
                 user.getEmail(),
-                user.getUserName());
+                user.getUsername());
 
         logger.debug("User updated:{}", user);
 
@@ -103,20 +110,20 @@ public class JdbcUserRepository implements UserRepository {
     public boolean existsByUsername(String username) {
 
         logger.debug("Checking if user exists by username={}", username);
-        String query = "SELECT EXISTS (SELECT 1 FROM users WHERE username = ?)";
+        String query = "SELECT COUNT(1) FROM users WHERE username = ?";
 
-        Boolean exists = jdbc.queryForObject(query, Boolean.class, username);
-        return exists != null && exists;
+        Integer count = jdbc.queryForObject(query, Integer.class, username);
+        return count != null && count > 0;
     }
 
     @Override
     public boolean existsByEmail(String email) {
 
         logger.debug("Checking if user exists by email={}", email);
-        String query = "SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
+        String query = "SELECT COUNT(1) FROM users WHERE email = ?";
 
-        Boolean exists = jdbc.queryForObject(query, Boolean.class, email);
-        return exists != null && exists;
+        Integer count = jdbc.queryForObject(query, Integer.class, email);
+        return count != null && count > 0;
     }
 
     private static class UserRowMapper implements RowMapper<UserEntity> {

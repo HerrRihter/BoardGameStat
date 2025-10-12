@@ -19,5 +19,5 @@ public class UserUpdateRequest {
 
     @NotBlank
     @Size(min = 3, max = 32)
-    private String userName;
+    private String username;
 }

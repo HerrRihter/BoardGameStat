@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.trinogin.User;
 import org.trinogin.dto.UserCreateRequest;
 import org.trinogin.service.UserService;
 import jakarta.validation.Valid;
@@ -39,4 +38,6 @@ public class AuthController {
     public String logout() {
         return "redirect:/login?logout";
     }
+
+
 }

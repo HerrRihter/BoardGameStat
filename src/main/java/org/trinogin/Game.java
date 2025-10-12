@@ -1,15 +1,15 @@
 package org.trinogin;
 
 public class Game {
-    private final String gameId;
+    private final Long gameId;
     private final String name;
 
-    public Game(String gameId, String name) {
+    public Game(Long gameId, String name) {
         this.gameId = gameId;
         this.name = name;
     }
 
-    public String getGameId() {
+    public Long getGameId() {
         return gameId;
     }
 

@@ -15,7 +15,7 @@ public class UserDetailsImpl implements UserDetails {
     private final String password;
 
     public UserDetailsImpl(UserEntity userEntity) {
-        this.username = userEntity.getUserName();
+        this.username = userEntity.getUsername();
         this.password = userEntity.getPassword();
         this.role = userEntity.getAuthorities();
     }

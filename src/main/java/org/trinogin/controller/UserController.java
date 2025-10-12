@@ -1,16 +1,14 @@
 package org.trinogin.controller;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.trinogin.User;
-import org.trinogin.dto.UserUpdateRequest;
 import org.trinogin.dto.UserDTO;
-import org.trinogin.mapper.UserMapper;
+import org.trinogin.dto.UserUpdateRequest;
 import org.trinogin.service.UserService;
-import jakarta.validation.Valid;
 
 import java.security.Principal;
 
@@ -54,7 +52,7 @@ public class UserController {
 
     @PostMapping("/update")
     public String updateUser(@Valid @ModelAttribute UserUpdateRequest userUpdateRequest, Principal principal) {
-        userUpdateRequest.setUserName(principal.getName());
+        userUpdateRequest.setUsername(principal.getName());
 
         userService.updateUser(userUpdateRequest);
         return "redirect:/board-game-stat/me";

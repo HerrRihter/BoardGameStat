@@ -8,7 +8,7 @@ import lombok.ToString;
 public class UserEntity {
 
     @Getter
-    private final String userName;
+    private final String username;
 
     @Getter
     private final String email;
@@ -28,22 +28,13 @@ public class UserEntity {
     @Getter
     private final String role;
 
-    public UserEntity(String userName, String email, String displayName, Long userId, String password, String role) {
-        this.userName = userName;
+    public UserEntity(String username, String email, String displayName, Long userId, String password, String role) {
+        this.username = username;
         this.email = email;
         this.displayName = displayName;
         this.userId = userId;
         this.password = password;
         this.role = role;
-    }
-
-    public UserEntity (User user) {
-        this.userName = user.getUsername();
-        this.email = user.getEmail();
-        this.displayName = user.getDisplayName();
-        this.userId = Long.valueOf(user.getUserId());
-        this.password = user.getPassword();
-        this.role = user.getAuthorities();
     }
 
     public String getAuthorities() {

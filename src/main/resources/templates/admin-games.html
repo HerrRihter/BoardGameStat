@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Admin - Manage Games</title>
+    <link rel="stylesheet" href="/css/user.css">
+    <style>
+        .games-list { display: grid; gap: 8px; }
+        .game-item { padding: 8px 12px; border: 1px solid #e4e4e7; border-radius: 8px; }
+        form.inline { display: flex; gap: 8px; align-items: center; }
+        .muted-btn { opacity: 0.5; cursor: not-allowed; }
+        .muted-input { opacity: 0.7; }
+        .center { text-align: center; }
+        .subtitle.muted { color: #888; }
+        .row { display: grid; gap: 8px; margin-bottom: 12px; }
+        .row-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: appHeader('Manage Games')"></div>
+
+<div class="container">
+    <div class="grid">
+        <!-- Сайдбар как есть; пункт меню «Admin» спрячь внутри самого фрагмента через sec:authorize -->
+        <div th:replace="fragments/sidebar :: appSidebar('admin-games')"></div>
+
+        <!-- Контент страницы виден только админу -->
+        <section class="content" sec:authorize="hasAuthority('admin')">
+            <div class="page-toolbar">
+                <div class="page-title">Game Management</div>
+            </div>
+            <div class="card">
+                <form id="add-game-form" method="post"
+                      th:action="@{/board-game-stat/admin/games/add}"
+                      style="margin-bottom: 24px;">
+                    <div class="row">
+                        <label for="game-name">Add new game:</label>
+                        <input id="game-name" name="name" type="text" placeholder="Game name" required />
+                    </div>
+
+                    <div class="row">
+                        <label for="game-type">Game type:</label>
+                        <input id="game-type" name="gameType" type="text" placeholder="e.g. Strategy, Party" required />
+                    </div>
+
+                    <div class="row">
+                        <label for="game-desc">Description:</label>
+                        <textarea id="game-desc" name="desc" rows="3" placeholder="Short description" required></textarea>
+                    </div>
+
+                    <div class="row row-inline">
+                        <div>
+                            <label for="min-players">Min players:</label>
+                            <input id="min-players" name="minPlayers" type="number" min="1" step="1" placeholder="1" required />
+                        </div>
+                        <div>
+                            <label for="max-players">Max players:</label>
+                            <input id="max-players" name="maxPlayers" type="number" min="1" step="1" placeholder="4" required />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Add</button>
+                </form>
+
+                <div class="games-list" th:if="${games != null and !#lists.isEmpty(games)}">
+                    <div th:each="g : ${games}" class="game-item" th:text="${g.name}">Game Name</div>
+                </div>
+
+                <div th:if="${games == null or #lists.isEmpty(games)}" class="center" style="padding: 28px 0;">
+                    <div class="stack" style="align-items:center;">
+                        <div class="subtitle muted">No games yet</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Для не-админа ничего «секретного» не рендерим -->
+        <section class="content" sec:authorize="!hasAuthority('admin')">
+            <div class="card">
+                <div class="center" style="padding: 28px 0;">
+                    <div class="subtitle muted">Nothing to see here.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>

@@ -12,31 +12,6 @@
         .muted-btn { opacity: 0.5; cursor: not-allowed; }
         .muted-input { opacity: 0.7; }
     </style>
-    <script>
-        function confirmSubmit(e){
-            const input = document.getElementById('game-name');
-            if(!input.value.trim()){
-                e.preventDefault();
-                input.focus();
-            }
-        }
-    </script>
-    <meta th:if="${_csrf != null}" name="csrf-token" th:content="${_csrf.token}"/>
-    <meta th:if="${_csrf != null}" name="csrf-header" th:content="${_csrf.headerName}"/>
-    <meta th:if="${_csrf != null}" name="csrf-param" th:content="${_csrf.parameterName}"/>
-    <script th:if="${_csrf != null}">
-        document.addEventListener('DOMContentLoaded', function(){
-            const t = document.querySelector('meta[name="csrf-token"]').content;
-            const p = document.querySelector('meta[name="csrf-param"]').content;
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = p; input.value = t;
-            const f = document.getElementById('add-game-form');
-            if(f) f.appendChild(input);
-        });
-    </script>
-    <!-- No inline comments inside code beyond this point -->
-    
 </head>
 <body>
 <div th:replace="fragments/header :: appHeader('Games')"></div>
@@ -47,56 +22,46 @@
         <section class="content">
             <div class="page-toolbar">
                 <div class="page-title">Games</div>
-                <div>
-                    <button id="open-add" class="btn-primary" th:disabled="${!isAdmin}" th:classappend="${!isAdmin} ? ' muted-btn' : ''">Add game</button>
-                </div>
             </div>
 
             <div class="card">
-                <div class="games-list" th:if="${games != null and !#lists.isEmpty(games)}">
-                    <div th:each="g : ${games}" class="game-item" th:text="${g.name}">Game Name</div>
-                </div>
-                <div th:if="${games == null or #lists.isEmpty(games)}" class="center" style="padding: 28px 0;">
-                    <div class="stack" style="align-items:center;">
-                        <div class="subtitle muted">No games yet</div>
-                        <button class="btn-primary" th:if="${isAdmin}" id="open-add-empty">Add your first game</button>
+                <!-- My games -->
+                <div>
+                    <h3>My games</h3>
+                    <div class="games-list">
+                        <div th:if="${#lists.isEmpty(myGames)}" class="muted">No games in your collection</div>
+                        <div th:each="g : ${myGames}" class="game-item">
+                            <span th:text="${g.name}">Game Name</span>
+                            <form method="post" th:action="@{/board-game-stat/games/remove-from-user}" style="display:inline;">
+                                <input type="hidden" name="gameId" th:value="${g.gameId}" />
+                                <button type="submit">Remove from collection</button>
+                            </form>
+                        </div>
                     </div>
+                </div>
+                <!-- Collapsed list of other games -->
+                <details style="margin-top:1em;">
+                    <summary>Add new games</summary>
+                    <div class="games-list">
+                        <div th:if="${#lists.isEmpty(otherGames)}" class="muted">No games available to add</div>
+                        <div th:each="g : ${otherGames}" class="game-item">
+                            <span th:text="${g.name}">Game Name</span>
+                            <form method="post" th:action="@{/board-game-stat/games/add-to-user}">
+                                <input type="hidden" name="gameId" th:value="${g.gameId}" />
+                                <button type="submit">Add to my collection</button>
+                            </form>
+                        </div>
+                    </div>
+                </details>
+            </div>
+            <div th:if="${myGames == null && otherGames == null}" class="center" style="padding: 28px 0;">
+                <div class="stack" style="align-items:center;">
+                    <div class="subtitle muted">No games yet</div>
                 </div>
             </div>
         </section>
     </div>
 </div>
-
-<div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal">
-        <div class="title" id="modal-title">Add a game</div>
-        <form id="add-game-form" method="post" th:action="@{/board-game-stat/games/add}" onsubmit="confirmSubmit(event)">
-            <div class="row">
-                <label for="game-name">Name</label>
-                <input id="game-name" name="name" type="text" placeholder="Game name" required th:disabled="${!isAdmin}"/>
-            </div>
-            <div class="actions">
-                <button type="button" class="btn-ghost" id="close-add">Cancel</button>
-                <button type="submit" class="btn-primary" th:disabled="${!isAdmin}">Add</button>
-            </div>
-        </form>
-    </div>
-    
-</div>
-
-<script>
-    const modal = document.getElementById('modal');
-    const open1 = document.getElementById('open-add');
-    const open2 = document.getElementById('open-add-empty');
-    const closeBtn = document.getElementById('close-add');
-    function openModal(){ if(open1 && !open1.disabled) { modal.style.display = 'flex'; setTimeout(() => document.getElementById('game-name')?.focus(), 0); } }
-    function closeModal(){ modal.style.display = 'none'; }
-    if(open1) open1.addEventListener('click', openModal);
-    if(open2) open2.addEventListener('click', openModal);
-    if(closeBtn) closeBtn.addEventListener('click', closeModal);
-    modal?.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
-</script>
-
 </body>
 </html>
 

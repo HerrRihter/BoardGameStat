@@ -1,9 +1,9 @@
 package org.trinogin.repository;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.trinogin.Game;
+import org.trinogin.GameEntity;
 
 import java.util.List;
 
@@ -16,20 +16,34 @@ public class GameRepository {
     }
 
     public List<Game> findAllGames() {
+        String query = "SELECT game_id, name FROM games ORDER BY name";
         return jdbc.query(
-                "SELECT game_id, name FROM games ORDER BY name",
+                query,
                 (rs, rowNum) -> new Game(
-                        rs.getString("game_id"),
+                        rs.getLong("game_id"),
                         rs.getString("name")
                 )
         );
     }
 
-    public void createGame(String name) {
-        try {
-            jdbc.update("INSERT INTO games (name) VALUES (?)", name);
-        } catch (DuplicateKeyException e) {
-        }
+    public GameEntity save(GameEntity game) {
+        String query = """
+                INSERT INTO games (name, game_type, description, min_players, max_players)
+                VALUES (?, ?, ?, ?, ?)
+                RETURNING game_id""";
+
+        Long newGameId = jdbc.queryForObject(
+                query,
+                Long.class,
+                game.getName(),
+                game.getGameType(),
+                game.getDesc(),
+                game.getMinPlayers(),
+                game.getMaxPlayers()
+        );
+
+        game.setId(newGameId);
+        return game;
     }
 }
 
