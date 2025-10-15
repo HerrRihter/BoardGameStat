@@ -30,3 +30,4 @@ public class AdminGamesController {
         return "redirect:/board-game-stat/admin/games";
     }
 }
+

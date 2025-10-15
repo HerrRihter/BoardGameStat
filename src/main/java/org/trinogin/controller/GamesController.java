@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.trinogin.Game;
+import org.trinogin.GameEntity;
 import org.trinogin.service.GameService;
 import org.trinogin.service.UserService;
 
@@ -28,13 +28,13 @@ public class GamesController {
 
     @GetMapping
     public String list(Model model, Principal principal) {
-        List<Game> allGames = gameService.getAllGames();
+        List<GameEntity> allGames = gameService.getAllGames();
         List<Long> userGameIds = userService.getUserGameIds(principal.getName());
 
-        List<Game> myGames = new ArrayList<>();
-        List<Game> otherGames = new ArrayList<>();
-        for (Game g : allGames) {
-            if (userGameIds.contains(g.getGameId())) {
+        List<GameEntity> myGames = new ArrayList<>();
+        List<GameEntity> otherGames = new ArrayList<>();
+        for (GameEntity g : allGames) {
+            if (userGameIds.contains(g.getId())) {
                 myGames.add(g);
             } else {
                 otherGames.add(g);

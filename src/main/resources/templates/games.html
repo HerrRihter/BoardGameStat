@@ -33,7 +33,7 @@
                         <div th:each="g : ${myGames}" class="game-item">
                             <span th:text="${g.name}">Game Name</span>
                             <form method="post" th:action="@{/board-game-stat/games/remove-from-user}" style="display:inline;">
-                                <input type="hidden" name="gameId" th:value="${g.gameId}" />
+                                <input type="hidden" name="gameId" th:value="${g.id}" />
                                 <button type="submit">Remove from collection</button>
                             </form>
                         </div>
@@ -47,7 +47,7 @@
                         <div th:each="g : ${otherGames}" class="game-item">
                             <span th:text="${g.name}">Game Name</span>
                             <form method="post" th:action="@{/board-game-stat/games/add-to-user}">
-                                <input type="hidden" name="gameId" th:value="${g.gameId}" />
+                                <input type="hidden" name="gameId" th:value="${g.id}" />
                                 <button type="submit">Add to my collection</button>
                             </form>
                         </div>

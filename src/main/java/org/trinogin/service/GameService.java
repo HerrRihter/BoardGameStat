@@ -1,7 +1,6 @@
 package org.trinogin.service;
 
 import org.springframework.stereotype.Service;
-import org.trinogin.Game;
 import org.trinogin.GameEntity;
 import org.trinogin.dto.GameCreateRequest;
 import org.trinogin.mapper.GameMapper;
@@ -17,7 +16,7 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public List<Game> getAllGames() {
+    public List<GameEntity> getAllGames() {
         return gameRepository.findAllGames();
     }
 
