@@ -62,10 +62,10 @@ public class UserService {
         userRepository.updatePassword(username, hash);
     }
 
-    public List<Long> getUserGameIds(String username) {
+    public List<String> getUserGameNames(String username) {
         Long userId = userRepository.findIdByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return userGamesRepository.findGameIdsByUserId(userId);
+        return userGamesRepository.findGameNamesByUserId(userId);
     }
 
     public void addGameToUser(String username, Long gameId) {

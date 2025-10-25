@@ -26,33 +26,37 @@ public class GamesController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String list(Model model, Principal principal) {
-        List<GameEntity> allGames = gameService.getAllGames();
-        List<Long> userGameIds = userService.getUserGameIds(principal.getName());
+    // list all games
+    // select ALL and displays <- no filtering whether games is already added
 
-        List<GameEntity> myGames = new ArrayList<>();
-        List<GameEntity> otherGames = new ArrayList<>();
-        for (GameEntity g : allGames) {
-            if (userGameIds.contains(g.getId())) {
-                myGames.add(g);
-            } else {
-                otherGames.add(g);
-            }
-        }
-        model.addAttribute("myGames", myGames);
-        model.addAttribute("otherGames", otherGames);
+    @GetMapping("collection")
+    public String listUserGames(Model model, Principal principal) {
+        List<String> userGames = userService.getUserGameNames(principal.getName());
+        model.addAttribute("myGames", userGames);
         return "games";
     }
 
-    @PostMapping("/add-to-user")
+/*    @GetMapping("library")
+    public String listGameLib(Model model, Principal p) {
+        List<String> allGames = gameService.getAllGames();
+
+        model.addAttribute(allGames);
+        return "game-lib";
+    }*/
+
+    @GetMapping("/{gameName}") //<- add html page, it should include 2 buttons (add/remove)
+
+
+
+    @PostMapping("/add-to-user") //TODO Long gameId ->  String gameName -> List<String> gameNames (to be added)
     public String addGameToUser(@RequestParam("gameId") Long gameId, Principal principal) {
+
         userService.addGameToUser(principal.getName(), gameId);
 
         return "redirect:/board-game-stat/games";
     }
 
-    @PostMapping("/remove-from-user")
+    @PostMapping("/remove-from-user") //TODO Long gameId ->  String gameName -> List<String> gameNames (to be deleted)
     public String removeGameFromUser(@RequestParam("gameId") Long gameId, Principal principal) {
         userService.removeGameFromUser(principal.getName(), gameId);
 

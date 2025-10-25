@@ -13,9 +13,9 @@ public class UserGamesRepository {
         this.jdbc = jdbc;
     }
 
-    public List<Long> findGameIdsByUserId(Long userId) {
-        String sql = "SELECT game_id FROM users_games WHERE user_id = ?";
-        return jdbc.query(sql, (rs, rowNum) -> rs.getLong("game_id"), userId);
+    public List<String> findGameNamesByUserId(Long userId) {
+        String sql = "SELECT name FROM users_games ug JOIN games g on g.game_id = ug.game_id WHERE user_id = ?";
+        return jdbc.query(sql, (rs, rowNum) -> rs.getString("name"), userId);
     }
 
     public void addGameToUser(Long userId, Long gameId) {

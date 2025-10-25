@@ -26,11 +26,10 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {
-
         logger.debug("Finding user by username: {}", username);
 
         String query = """
-                SELECT u.user_id, u.username, u.email, u.displayname, u.password_hash, r.role_name\s
+                SELECT u.user_id, u.username, u.email, u.displayname, u.password_hash, r.role_name
                 FROM users u JOIN roles r ON u.role = r.role_id WHERE u.username = ?""";
 
         try {
