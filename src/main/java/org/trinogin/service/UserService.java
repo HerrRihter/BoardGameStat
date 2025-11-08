@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.trinogin.UserEntity;
+import org.trinogin.entity.UserEntity;
 import org.trinogin.dto.UserCreateRequest;
 import org.trinogin.dto.UserDTO;
 import org.trinogin.dto.UserUpdateRequest;
@@ -15,8 +15,7 @@ import org.trinogin.mapper.UserMapper;
 import org.trinogin.repository.UserGamesRepository;
 import org.trinogin.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Validated
 @Service
@@ -62,23 +61,45 @@ public class UserService {
         userRepository.updatePassword(username, hash);
     }
 
-    public List<String> getUserGameNames(String username) {
+    public Set<Long> getUserGameIds(String username) {
         Long userId = userRepository.findIdByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return userGamesRepository.findGameNamesByUserId(userId);
+        return new HashSet<>(userGamesRepository.findGameIdsByUserId(userId));
     }
 
-    public void addGameToUser(String username, Long gameId) {
+    public void addGamesToUser(String username, List<Long> gameIds) {
+        Long userId = userRepository.findByUsername(username)
+                .map(UserEntity::getUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        for (Long gameId : gameIds) {
+            userGamesRepository.addGameToUser(userId, gameId);
+        }
+    }
+
+    public void removeGamesFromUser(String username, List<Long> gameIds) {
+        Long userId = userRepository.findByUsername(username)
+                .map(UserEntity::getUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        for (Long gameId : gameIds) {
+            userGamesRepository.removeGameFromUser(userId, gameId);
+        }
+    }
+
+    public void addGameToUserById(String username, Long gameId) {
         Long userId = userRepository.findByUsername(username)
                 .map(UserEntity::getUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userGamesRepository.addGameToUser(userId, gameId);
     }
 
-    public void removeGameFromUser(String username, Long gameId) {
+    public void removeGameFromUserById(String username, Long gameId) {
         Long userId = userRepository.findByUsername(username)
                 .map(UserEntity::getUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userGamesRepository.removeGameFromUser(userId, gameId);
+    }
+
+    public boolean hasGame(String username, Long gameId) {
+        return getUserGameIds(username).contains(gameId);
     }
 }

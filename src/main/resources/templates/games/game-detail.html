@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title th:text="${game.name}">Game Details</title>
+    <link rel="stylesheet" href="/css/user.css">
+    <style>
+        .game-detail {
+            display: grid;
+            gap: 20px;
+        }
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+        .game-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .game-info {
+            display: grid;
+            gap: 12px;
+        }
+        .info-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .info-label {
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .info-value {
+            color: var(--text);
+        }
+        .game-description {
+            padding: 12px;
+            background: var(--panel);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        .game-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: appHeader('Game Details')"></div>
+
+<div class="container">
+    <div class="grid">
+        <div th:replace="fragments/sidebar :: appSidebar('games')"></div>
+        <section class="content">
+            <div class="page-toolbar">
+                <div class="page-title">Game Details</div>
+            </div>
+
+            <div class="card">
+                <div class="game-detail">
+                    <div class="game-header">
+                        <h1 class="game-title" th:text="${game.name}">Game Name</h1>
+                    </div>
+
+                    <div class="game-info">
+                        <div class="info-row" th:if="${game.gameType != null and !#strings.isEmpty(game.gameType)}">
+                            <span class="info-label">Type:</span>
+                            <span class="info-value" th:text="${game.gameType}">Game Type</span>
+                        </div>
+
+                        <div class="info-row" th:if="${game.minPlayers > 0 or game.maxPlayers > 0}">
+                            <span class="info-label">Players:</span>
+                            <span class="info-value">
+                                <span th:if="${game.minPlayers > 0}" th:text="${game.minPlayers}">Min</span>
+                                <span th:if="${game.minPlayers > 0 and game.maxPlayers > 0}"> - </span>
+                                <span th:if="${game.maxPlayers > 0}" th:text="${game.maxPlayers}">Max</span>
+                            </span>
+                        </div>
+
+                        <div class="info-row" th:if="${game.desc != null and !#strings.isEmpty(game.desc)}">
+                            <span class="info-label">Description:</span>
+                            <div class="info-value">
+                                <div class="game-description" th:text="${game.desc}">Game description</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="game-actions">
+                        <form th:if="${!hasGame}" 
+                              method="post" 
+                              th:action="@{/board-game-stat/games/add}"
+                              style="display: inline;">
+                            <input type="hidden" name="gameId" th:value="${game.id}" />
+                            <button type="submit" class="btn-primary">Add to Collection</button>
+                        </form>
+                        <form th:if="${hasGame}" 
+                              method="post" 
+                              th:action="@{/board-game-stat/games/remove}"
+                              style="display: inline;">
+                            <input type="hidden" name="gameId" th:value="${game.id}" />
+                            <button type="submit" class="btn-ghost">Remove from Collection</button>
+                        </form>
+                        <a th:href="@{/board-game-stat/games/collection}" class="btn-ghost">Back to Collection</a>
+                        <a th:href="@{/board-game-stat/games/library}" class="btn-ghost">Back to Library</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>
+
+

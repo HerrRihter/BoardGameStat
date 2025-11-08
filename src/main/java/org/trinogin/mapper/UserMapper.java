@@ -1,6 +1,6 @@
 package org.trinogin.mapper;
 
-import org.trinogin.UserEntity;
+import org.trinogin.entity.UserEntity;
 import org.trinogin.dto.UserCreateRequest;
 import org.trinogin.dto.UserDTO;
 import org.trinogin.dto.UserUpdateRequest;

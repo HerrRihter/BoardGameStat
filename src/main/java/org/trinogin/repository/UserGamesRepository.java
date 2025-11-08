@@ -1,30 +1,10 @@
 package org.trinogin.repository;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
-@Repository
-public class UserGamesRepository {
-    private final JdbcTemplate jdbc;
-
-    public UserGamesRepository(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
-
-    public List<String> findGameNamesByUserId(Long userId) {
-        String sql = "SELECT name FROM users_games ug JOIN games g on g.game_id = ug.game_id WHERE user_id = ?";
-        return jdbc.query(sql, (rs, rowNum) -> rs.getString("name"), userId);
-    }
-
-    public void addGameToUser(Long userId, Long gameId) {
-        String sql = "INSERT INTO users_games (user_id, game_id) VALUES (?, ?) ON CONFLICT DO NOTHING";
-        jdbc.update(sql, userId, gameId);
-    }
-
-    public void removeGameFromUser(Long userId, Long gameId) {
-        String sql = "DELETE FROM users_games WHERE user_id = ? AND game_id = ?";
-        jdbc.update(sql, userId, gameId);
-    }
+public interface UserGamesRepository {
+    List<Long> findGameIdsByUserId(Long userId);
+    List<String> findGameNamesByUserId(Long userId);
+    void addGameToUser(Long userId, Long gameId);
+    void removeGameFromUser(Long userId, Long gameId);
 }

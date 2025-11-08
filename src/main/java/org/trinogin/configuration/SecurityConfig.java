@@ -26,7 +26,6 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers(HttpMethod.POST, "/register").permitAll()
                                 .requestMatchers("/login", "/css/**", "/register").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/board-game-stat/games/add").hasAuthority("admin")
                                 .requestMatchers("/board-game-stat/admin/**").hasAuthority("admin")
                                 .anyRequest().authenticated()
                 )

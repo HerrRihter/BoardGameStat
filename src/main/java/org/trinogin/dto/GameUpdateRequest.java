@@ -1,21 +1,19 @@
-package org.trinogin;
-
+package org.trinogin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Timestamp;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class GameEntity {
+public class GameUpdateRequest {
     private Long id;
     private String name;
     private String gameType;
     private String desc;
     private int minPlayers;
     private int maxPlayers;
-    private Timestamp createdAt;
 }
+

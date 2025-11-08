@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>My Collection</title>
+    <link rel="stylesheet" href="/css/user.css">
+    <style>
+        .games-list { display: grid; gap: 8px; }
+        .game-item { 
+            padding: 8px 12px; 
+            border: 1px solid var(--border); 
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .game-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .game-link {
+            flex: 1;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .game-link:hover {
+            color: var(--accent);
+        }
+        .page-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .bulk-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .center { text-align: center; }
+        .subtitle.muted { color: var(--muted); }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: appHeader('Games')"></div>
+
+<div class="container">
+    <div class="grid">
+        <div th:replace="fragments/sidebar :: appSidebar('games')"></div>
+        <section class="content">
+            <div class="page-toolbar">
+                <div class="page-title">My Collection</div>
+                <div class="bulk-actions">
+                    <button type="button" id="selectAll" class="btn-ghost">Select All</button>
+                    <button type="button" id="removeBtn" class="btn-primary" disabled>Remove Selected</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <form id="removeForm" method="post" th:action="@{/board-game-stat/games/remove-from-user}">
+                    <div class="games-list">
+                        <div th:if="${#lists.isEmpty(games)}" class="center" style="padding: 28px 0;">
+                            <div class="subtitle muted">No games in your collection</div>
+                        </div>
+                        <div th:each="game : ${games}" class="game-item">
+                            <input type="checkbox" 
+                                   class="game-checkbox" 
+                                   name="gameIds" 
+                                   th:value="${game.id}"
+                                   onchange="updateRemoveButton()">
+                            <a th:href="@{/board-game-stat/games/{gameName}(gameName=${game.name})}" 
+                               class="game-link"
+                               th:text="${game.name}">Game Name</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    function updateRemoveButton() {
+        const checkboxes = document.querySelectorAll('.game-checkbox:checked');
+        const removeBtn = document.getElementById('removeBtn');
+        removeBtn.disabled = checkboxes.length === 0;
+    }
+
+    document.getElementById('selectAll').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('.game-checkbox');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        checkboxes.forEach(cb => cb.checked = !allChecked);
+        updateRemoveButton();
+    });
+
+    document.getElementById('removeBtn').addEventListener('click', function() {
+        document.getElementById('removeForm').submit();
+    });
+</script>
+</body>
+</html>
+
+
+
+
+

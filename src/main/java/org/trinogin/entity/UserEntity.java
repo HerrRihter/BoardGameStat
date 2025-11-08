@@ -1,4 +1,4 @@
-package org.trinogin;
+package org.trinogin.entity;
 
 import lombok.Getter;
 import lombok.Setter;

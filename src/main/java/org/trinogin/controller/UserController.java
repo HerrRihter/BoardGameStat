@@ -25,7 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("/me")
     public String getUser(Model model, Principal principal) {
         String username = principal.getName();
@@ -41,7 +40,6 @@ public class UserController {
         model.addAttribute("user", dto);
         return "home";
     }
-
 
     @PostMapping("/update-password")
     public String updatePassword(@RequestParam("newPassword") String newPassword, Principal principal) {

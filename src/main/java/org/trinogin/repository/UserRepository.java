@@ -1,8 +1,7 @@
 package org.trinogin.repository;
 
-import org.trinogin.UserEntity;
+import org.trinogin.entity.UserEntity;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
