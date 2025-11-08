@@ -2,9 +2,12 @@ package org.trinogin.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +22,24 @@ public class SecurityConfig {
     private String rememberMeKey;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+    @Order(1)
+    public SecurityFilterChain apiChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/board-game-stat/api/**")
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/board-game-stat/api/register").permitAll()
+                        .requestMatchers("/board-game-stat/api/admin/**").hasAuthority("admin")
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
+
+    //@Bean
+    //@Order(2)
+    public SecurityFilterChain webChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth ->
@@ -44,7 +64,6 @@ public class SecurityConfig {
                     if (ctx == null) ctx = "";
                     res.sendRedirect(ctx + "/board-game-stat/home");
                 }));
-        // ↑↑↑
 
         return http.build();
     }
